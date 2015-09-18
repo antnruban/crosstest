@@ -1,13 +1,12 @@
-require 'selenium-webdriver'
 require 'capybara'
 require 'byebug'
 include Capybara::DSL
 
-WAIT_TIME = 10.seconds
-SCREENS_QUANTITY = 1
-TOOL_SEPARATOR = "/#"
-START_DATE = DateTime.now
-TEST_URL = "http://google.com.ua"
+WAIT_SECONDS = 120
+SCREENS_QUANTITY = 15
+URL_SEPARATOR = "/#"
+START_TIME = Time.now
+TEST_URL = "http://techgarden.demo.htmlcms.me"
 IMAGES_PATH = ".//a[@class='module module--screenshot module--screenshot-loaded']"
 
 Capybara.configure do |config|
@@ -17,15 +16,19 @@ Capybara.configure do |config|
   config.app_host   = 'https://dev.modern.ie/tools/screenshots'
 end
 
-visit "/" + TOOL_SEPARATOR + TEST_URL
+visit "/" + URL_SEPARATOR + TEST_URL
 
 def get_href id
   find(:id, id)[:href]
 end
 
+def ending_time sec
+  Time.at(START_TIME.to_i + sec)
+end
+
 # Waiting for all screenshots on page
 while all(:xpath, IMAGES_PATH).length != SCREENS_QUANTITY
-  break if DateTime.now >= START_DATE + WAIT_TIME
+  break if Time.now > ending_time(WAIT_SECONDS)
 end
 
 puts "IE 11.0 Win 8.1 -- #{ get_href('screenshot0') }"
