@@ -10,9 +10,10 @@ START_TIME = Time.now
 TEST_URL = "http://google.com.ua"
 IMAGES_PATH = ".//a[@class='module module--screenshot module--screenshot-loaded']"
 
+headless = Headless.new
+headless.start
+
 Capybara.configure do |config|
-  headless = Headless.new
-  headless.start
   config.run_server = true
   config.ignore_hidden_elements = false
   config.default_driver = :selenium
@@ -29,24 +30,29 @@ def ending_time sec
   Time.at(START_TIME.to_i + sec)
 end
 
+def print_url platform, screen_id
+  puts "#{ platform } -- #{ get_href('screenshot0') }"
+end
+
 # Waiting for all screenshots on page
 while all(:xpath, IMAGES_PATH).length != SCREENS_QUANTITY
   break if Time.now > ending_time(WAIT_SECONDS)
 end
 
-puts "IE 11.0 Win 8.1 -- #{ get_href('screenshot0') }"
-puts "Chrome 42.0 Win 8.1 -- #{ get_href('screenshot1') }"
-puts "FireFox 37.0 Win 8.1 -- #{ get_href('screenshot2') }"
-puts "Safari 7.1 -- #{ get_href('screenshot3') }"
-puts "Safari 6.0 -- #{ get_href('screenshot4') }"
-puts "Opera 12.16 Win 8.1 -- #{ get_href('screenshot5') }"
-puts "IE 10 Win 7-- #{ get_href('screenshot6') }"
-puts "IE 9 Win 7 -- #{ get_href('screenshot7') }"
-puts "IE 8 Win 7 -- #{ get_href('screenshot8') }"
-puts "IE 7 Win XP -- #{ get_href('screenshot9') }"
-puts "IE 6 Win XP -- #{ get_href('screenshot10') }"
-puts "Nexus 6 Android 5 -- #{ get_href('screenshot11') }"
-puts "Nexus 9 Android 5 -- #{ get_href('screenshot12') }"
-puts "iPhone 6 IOS 8.3 -- #{ get_href('screenshot13') }"
-puts "iPad Air IOS 8.3 -- #{ get_href('screenshot14') }"
+print_url("IE 11.0 Win 8.1","screenshot0")
+print_url("Chrome 42.0 Win 8.1", "screenshot1")
+print_url("FireFox 37.0 Win 8.1", "screenshot2")
+print_url("Safari 7.1", "screenshot3")
+print_url("Safari 6.0", "screenshot4")
+print_url("Opera 12.16 Win 8.1", "screenshot5")
+print_url("IE 10 Win 7", "screenshot6")
+print_url("IE 9 Win 7", "screenshot7")
+print_url("IE 8 Win 7", "screenshot8")
+print_url("IE 7 Win XP", "screenshot9")
+print_url("IE 6 Win XP", "screenshot10")
+print_url("Nexus 6 Android 5", "screenshot11")
+print_url("Nexus 9 Android 5", "screenshot12")
+print_url("iPhone 6 IOS 8.3", "screenshot13")
+print_url("iPad Air IOS 8.3", "screenshot14")
+
 headless.destroy
