@@ -1,5 +1,6 @@
 require 'capybara'
 require 'byebug'
+require 'headless'
 include Capybara::DSL
 
 WAIT_SECONDS = 120
@@ -10,6 +11,8 @@ TEST_URL = "http://google.com.ua"
 IMAGES_PATH = ".//a[@class='module module--screenshot module--screenshot-loaded']"
 
 Capybara.configure do |config|
+  headless = Headless.new
+  headless.start
   config.run_server = true
   config.ignore_hidden_elements = false
   config.default_driver = :selenium
@@ -46,3 +49,4 @@ puts "Nexus 6 Android 5 -- #{ get_href('screenshot11') }"
 puts "Nexus 9 Android 5 -- #{ get_href('screenshot12') }"
 puts "iPhone 6 IOS 8.3 -- #{ get_href('screenshot13') }"
 puts "iPad Air IOS 8.3 -- #{ get_href('screenshot14') }"
+headless.destroy
